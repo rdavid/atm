@@ -7,8 +7,12 @@ namespace atm
 
 class interface_handler
 {
-  /* PUT YOUR CODE HERE */
-private:
+ public:
+  const interface& get() const {
+    return m_interface;
+  }
+
+ private:
   interface m_interface;
 };
 
