@@ -3,6 +3,7 @@
 #include <atm_handler.hpp>
 #include <bank_handler.hpp>
 #include <interface_handler.hpp>
+#include <machine.hpp>
 #include <string>
 #include <sstream>
 
@@ -19,9 +20,15 @@ class driver {
   void cancel_pressed();
 
  private:
+  friend class c_state_init;
+  friend class c_state_card_in;
+  friend class c_state_pin_ok;
+  friend class c_state_withdraw;
   interface_handler m_interface;
   bank_handler m_bank;
 //  atm_handler m_atm;
+  c_machine m_machine;
+  unsigned m_amount;
   std::string m_account;
   std::stringstream m_pass;
 };
