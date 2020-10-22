@@ -30,10 +30,12 @@ void driver::withdraw_pressed(unsigned amount) {
 
 void driver::cancel_pressed() {
   m_amount = 0;
-  m_pass.flush();
+  m_pass.str("");
   m_account.clear();
   m_machine.reset();
   m_interface.get().display_cancelled();
+  m_interface.get().eject_card();
+  m_interface.get().display_enter_card();
 }
 
 // clang-format on

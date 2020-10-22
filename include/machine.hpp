@@ -25,7 +25,7 @@ struct c_event_balance : c_event {
 };
 
 struct c_event_withdraw : c_event {
-  virtual std::string get_id() const { return "withdrow"; }
+  virtual std::string get_id() const { return "withdraw"; }
 };
 
 // State machine.

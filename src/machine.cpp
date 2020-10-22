@@ -35,7 +35,10 @@ class c_state_init : public c_state {
   c_state_init() { add(get_id()); }
   virtual std::string get_id() const { return "init"; }
   virtual const c_state* handle(const c_event& e, driver& d) const {
-    if (e.get_id() != "insert") return this;
+    if (e.get_id() != "insert") {
+      d.m_interface.get().display_enter_card();
+      return this;
+    }
     d.m_interface.get().display_enter_pin();
     return get_state("card_in");
   }
@@ -51,20 +54,28 @@ class c_state_card_in : public c_state {
   c_state_card_in() { add(get_id()); }
   virtual std::string get_id() const { return "card_in"; }
   virtual const c_state* handle(const c_event& e, driver& d) const {
-    if (e.get_id() == "digit") {
-      if (d.m_pass.str().length() < 4) return this;
-      if (d.m_bank.get().verify_pin(d.m_account, d.m_pass.str())) {
-        d.
-        m_interface.
-        get().
-        display_balance(d.m_bank.get().balance(d.m_account));
-        return get_state("pin_ok");
-      } else {
-        d.m_interface.get().display_pin_incorrect_message();
-        d.m_pass.flush();
-        d.m_account.clear();
-      }
+    if (e.get_id() != "digit" || d.m_pass.str().length() > 4) {
+      d.m_pass.str("");
+      d.m_account.clear();
+      d.m_interface.get().eject_card();
+      d.m_interface.get().display_enter_card();
+      return get_state("init");
     }
+    if (d.m_pass.str().length() < 4) {
+      return this;
+    }
+    if (d.m_bank.get().verify_pin(d.m_account, d.m_pass.str())) {
+      d.
+      m_interface.
+      get().
+      display_withdrawal_options();
+      return get_state("pin_ok");
+    }
+    d.m_pass.str("");
+    d.m_account.clear();
+    d.m_interface.get().display_pin_incorrect_message();
+    d.m_interface.get().eject_card();
+    d.m_interface.get().display_enter_card();
     return get_state("init");
   }
  private:
@@ -81,7 +92,15 @@ class c_state_pin_ok : public c_state {
   virtual const c_state* handle(const c_event& e, driver& d) const {
     if (e.get_id() == "withdraw") {
       d.m_bank.get().withdraw(d.m_account, d.m_amount);
+      d.m_interface.get().issue_money(d.m_amount);
+      return this;
     }
+    if (e.get_id() == "balance") {
+      auto b = d.m_bank.get().balance(d.m_account);
+      d.m_interface.get().display_balance(b);
+      return this;
+    }
+    std::cerr << "Event " << e.get_id() << " is not handled." << std::endl;
     return this;
   }
  private:
