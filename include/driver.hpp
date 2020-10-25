@@ -18,8 +18,9 @@ class driver {
   void withdraw_pressed(unsigned amount);
   void card_inserted(const std::string& account);
   void cancel_pressed();
-
  private:
+  // Keeps add data at driver. The states need to have access to the data, use
+  // friend feature. TODO: consider more elegant solution.
   friend class c_state_init;
   friend class c_state_card_in;
   friend class c_state_pin_ok;

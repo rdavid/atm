@@ -6,7 +6,7 @@ namespace atm
 // clang-format off
 
 driver::driver() {
-  m_interface.get().display_enter_card();
+  m_interface.display_enter_card();
 }
 
 void driver::card_inserted(const std::string& account) {
@@ -29,13 +29,15 @@ void driver::withdraw_pressed(unsigned amount) {
 }
 
 void driver::cancel_pressed() {
+  auto m1 = m_interface.display_cancelled();
+  m1.wait();
+  auto m2 = m_interface.eject_card();
   m_amount = 0;
   m_pass.str("");
   m_account.clear();
   m_machine.reset();
-  m_interface.get().display_cancelled();
-  m_interface.get().eject_card();
-  m_interface.get().display_enter_card();
+  m2.wait();
+  m_interface.display_enter_card();
 }
 
 // clang-format on
