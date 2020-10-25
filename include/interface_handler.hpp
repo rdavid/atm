@@ -2,7 +2,6 @@
 
 #include <interface.hpp>
 #include <future>
-#include <mutex>
 
 namespace atm
 {
@@ -35,15 +34,9 @@ class interface_handler {
   }
   std::future<void> eject_card() const {
     return std::async(&interface::eject_card, &m_interface);
-    //return std::async(&interface_handler::call, &interface::eject_card);
   }
  private:
-//  std::mutex m_locker;
   interface m_interface;
-//  void call(void (interface::*p)(void)) {
-//    std::lock_guard<std::mutex> l(m_locker);
-//    (m_interface.*p)();
-//  }
 };
 
 }  // namespace atm
