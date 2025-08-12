@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2020-2025 David Rabkin
+// SPDX-License-Identifier: 0BSD
 #pragma once
 
 #include <interface.hpp>

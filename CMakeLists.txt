@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2020-2025 David Rabkin
+# SPDX-License-Identifier: 0BSD
+.PHONY: all clean test
 cmake_minimum_required(VERSION 3.10)
 
 project(atm CXX)
