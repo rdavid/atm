@@ -1,0 +1,94 @@
+// Settings:
+:toc: macro
+:!toc-title:
+// URLs:
+:img-hoc: https://hitsofcode.com/github/rdavid/atm?branch=master&label=hits%20of%20code
+:img-license: https://img.shields.io/github/license/rdavid/atm?color=blue&labelColor=gray&logo=freebsd&logoColor=lightgray&style=flat
+:url-hoc: https://hitsofcode.com/view/github/rdavid/atm?branch=master
+:url-license: https://github.com/rdavid/atm/blob/master/LICENSES/0BSD.txt
+
+= ATM
+
+image:{img-hoc}[hits of code,link={url-hoc}]
+image:{img-license}[license,link={url-license}]
+
+toc::[]
+
+== About
+
+Implement a simple ATM (Automated Teller Machine) system.
+The system should include 3 components:
+
+* link:include/interface_handler.hpp[User interface]
+* link:include/atm_handler.hpp[ATM logic]
+* link:include/bank_handler.hpp[Bank communication]
+
+== Description
+
+For maximizing responsiveness communication between these components should be
+non-blocking, so, for example the `atm_handler` can't call a function of
+`user_interface` directly because it would block it from handling other events.
+
+At start, the system should wait for a card to be inserted. Once the card is
+inserted, it then waits for the user to enter their PIN, one digit at a time.
+Once enough digits have been entered, the PIN is verified.
+If the PIN is not OK, you’re finished, so you return the card to the customer
+and resume waiting for someone to enter their card.
+If the PIN is OK, you wait for them to either cancel the transaction, display
+their balance or withdraw 50.
+If they cancel, you’re finished, and you return their card.
+If they select to withdraw, you wait for confirmation from the bank before
+issuing the cash and returning the card or displaying an “insufficient funds”
+message and returning their card.
+Every user operation other than the above should be ignored.
+Assume a legal PIN is of 4 digit length.
+Your code should interact with the user and bank using the interfaces in
+link:include/interface.hpp[`interface.hpp`] and
+link:include/bank.hpp[`bank.hpp`].
+link:src/main.hpp[`main.cpp`] will be used to drive the application.
+
+== Example
+
+[,sh]
+----
+Please enter your card (i)
+i
+Please enter your PIN (0-9)
+3412
+PIN incorrect
+Ejecting card
+Please enter your card (i)
+i
+Please enter your PIN (0-9)
+1234
+Withdraw 50? (w)
+Display Balance? (b)
+Cancel? (c)
+w
+Issuing 50
+b
+The balance of your account is 50
+c
+Cancelled
+Ejecting card
+Please enter your card (i)
+i
+Please enter your PIN (0-9)
+1234
+Withdraw 50? (w)
+Display Balance? (b)
+Cancel? (c)
+b
+The balance of your account is 50
+q
+----
+
+== Implementation details
+
+* You should implement the functions in link:src/driver.cpp[`driver.cpp`]
+* You are provided with CMake build scripts but allowed to use any build
+system you wish
+* Free free to add member variables and functions to the above classes as you
+see fit as well as defining additional types
+* Your solution should compile and run without errors
+* For bonus points, add unit tests to check your implementation

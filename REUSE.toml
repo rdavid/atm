@@ -5,7 +5,7 @@ version = 1
 path = [
 	"cmake/CompilerWarnings.cmake",
 	".gitignore",
-	"README.md",
+	"README.adoc",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "2025 David Rabkin"
