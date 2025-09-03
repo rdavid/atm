@@ -24,7 +24,6 @@ public:
 
   unsigned balance([[maybe_unused]] const std::string& account) const
   {
-
     assert(account == "test_account");
     return m_balance;
   }
