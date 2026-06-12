@@ -1,5 +1,12 @@
 // SPDX-FileCopyrightText: 2020-2025 David Rabkin
 // SPDX-License-Identifier: 0BSD
+// machine.cpp - state machine implementation for the ATM driver.
+//
+// Implements the ATM state machine as a set of singleton state objects.
+// Each state provides get_id() and handle() and registers itself in the
+// static registry so that states can be looked up by id. This design keeps
+// transitions explicit and avoids dynamic allocation during event handling.
+
 #include "machine.hpp"
 #include "driver.hpp"
 #include <map>
@@ -7,7 +14,13 @@
 
 namespace atm {
 
-// States definitions.
+// State machine core and state definitions.
+//
+// Each concrete c_state subclass represents a node in the state machine.
+// The handle() method receives an event and the driver context and returns
+// the next state (which may be the same instance). States register via
+// add() into the static registry so they can be looked up by id.
+
 class c_state {
  public:
   virtual std::string get_id() const = 0;

@@ -1,5 +1,18 @@
 // SPDX-FileCopyrightText: 2020-2025 David Rabkin
 // SPDX-License-Identifier: 0BSD
+// main.cpp - interactive CLI test harness for the ATM driver.
+//
+// Key bindings:
+//  0-9 : enter PIN digits
+//  b   : show balance
+//  w   : withdraw fixed amount (50)
+//  c   : cancel
+//  q   : quit
+//  i   : insert test card ("test_account")
+//
+// Note: This program is a simple test harness; consider making amounts
+// and the test account configurable.
+
 #include <cstdio>
 #include <driver.hpp>
 #include <iostream>
