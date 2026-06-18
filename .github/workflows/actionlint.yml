@@ -2,14 +2,15 @@
 # SPDX-License-Identifier: 0BSD
 ---
 name: actionlint
-'on': [pull_request, push]
+'on':
+  pull_request:
+  push:
+    branches: [master]
 permissions:
   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-env:
-  URL: https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash # yamllint disable-line
 jobs:
   actionlint:
     runs-on: ubuntu-24.04
@@ -17,5 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - id: get
-        run: bash <(curl --silent "$URL")
+        run: |
+          ver=1.7.12
+          srv=https://raw.githubusercontent.com/rhysd/actionlint
+          srv=$srv/v$ver/scripts/download-actionlint.bash
+          bash <(curl --silent "$srv") "$ver"
       - run: ${{ steps.get.outputs.executable }}
