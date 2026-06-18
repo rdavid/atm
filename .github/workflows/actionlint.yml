@@ -3,17 +3,14 @@
 ---
 name: actionlint
 'on':
+  pull_request:
   push:
     branches: [master]
-  pull_request:
 permissions:
   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-env:
-  ACTIONLINT_VERSION: 1.7.12
-  URL: https://raw.githubusercontent.com/rhysd/actionlint/v1.7.12/scripts/download-actionlint.bash # yamllint disable-line
 jobs:
   actionlint:
     runs-on: ubuntu-24.04
@@ -21,5 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - id: get
-        run: bash <(curl --silent "$URL") "$ACTIONLINT_VERSION"
+        run: |
+          ver=1.7.12
+          srv=https://raw.githubusercontent.com/rhysd/actionlint
+          srv=$srv/v$ver/scripts/download-actionlint.bash
+          bash <(curl --silent "$srv") "$ver"
       - run: ${{ steps.get.outputs.executable }}
