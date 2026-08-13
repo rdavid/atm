@@ -9,6 +9,7 @@
 :url-cv: http://cv.rabkin.co.il
 :url-hoc: https://hitsofcode.com/view/github/rdavid/atm?branch=master
 :url-license: https://github.com/rdavid/atm/blob/master/LICENSES/0BSD.txt
+:url-src: https://github.com/rdavid/atm/blob/master
 
 = ATM
 
@@ -40,9 +41,9 @@ endif::[]
 Implement a simple ATM (Automated Teller Machine) system.
 The system should include 3 components:
 
-* link:include/interface_handler.hpp[User interface]
-* link:include/atm_handler.hpp[ATM logic]
-* link:include/bank_handler.hpp[Bank communication]
+* link:{url-src}/include/interface_handler.hpp[User interface]
+* link:{url-src}/include/atm_handler.hpp[ATM logic]
+* link:{url-src}/include/bank_handler.hpp[Bank communication]
 
 == Description
 
@@ -65,9 +66,9 @@ message and returning their card.
 Every user operation other than the above should be ignored.
 Assume a legal PIN is 4 digits long.
 Your code should interact with the user and bank using the interfaces in
-link:include/interface.hpp[`interface.hpp`] and
-link:include/bank.hpp[`bank.hpp`].
-link:src/main.cpp[`main.cpp`] will be used to drive the application.
+link:{url-src}/include/interface.hpp[`interface.hpp`] and
+link:{url-src}/include/bank.hpp[`bank.hpp`].
+link:{url-src}/src/main.cpp[`main.cpp`] will be used to drive the application.
 
 == Example
 
@@ -107,7 +108,8 @@ q
 
 == Implementation details
 
-* You should implement the functions in link:src/driver.cpp[`driver.cpp`]
+* You should implement the functions in
+link:{url-src}/src/driver.cpp[`driver.cpp`]
 * You are provided with CMake build scripts but allowed to use any build
 system you wish
 * Feel free to add member variables and functions to the above classes as you
