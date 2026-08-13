@@ -1,11 +1,14 @@
-# SPDX-FileCopyrightText: 2025-2026 David Rabkin
+# SPDX-FileCopyrightText: 2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 ---
-name: reuse
+name: zizmor
 'on':
   pull_request:
+    paths: &paths
+      - .github/**
   push:
     branches: [master]
+    paths: *paths
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,11 +16,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
-  reuse:
-    timeout-minutes: 15
+  zizmor:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: fsfe/reuse-action@v6.0.0
+      - uses: actions/cache@v6.1.0
+        with:
+          path: ~/.cache/pip
+          key: pip-zizmor-1.26.1
+      - run: pipx run zizmor==1.26.1 .
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

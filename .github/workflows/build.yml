@@ -1,12 +1,14 @@
-# SPDX-FileCopyrightText: 2025-2026 David Rabkin
+# SPDX-FileCopyrightText: 2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 ---
-name: yamllint
+name: build
 'on':
   pull_request:
     paths: &paths
-      - .github/*.yml
-      - .github/workflows/*.yml
+      - CMakeLists.txt
+      - cmake/**
+      - include/**
+      - src/**
   push:
     branches: [master]
     paths: *paths
@@ -17,16 +19,19 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
-  yamllint:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-14
+          - ubuntu-24.04
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: ibiqlik/action-yamllint@v3.1.1
-        with:
-          file_or_dir: >
-            ./.github/*.yml
-            ./.github/workflows/*.yml
-          strict: true
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+      - run: cmake --build build
