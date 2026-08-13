@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020-2025 David Rabkin
+// SPDX-FileCopyrightText: 2020-2026 David Rabkin
 // SPDX-License-Identifier: 0BSD
 #pragma once
 
@@ -21,8 +21,8 @@ class driver {
   void card_inserted(const std::string& account);
   void cancel_pressed();
  private:
-  // Keeps add data at driver. The states need to have access to the data, use
-  // friend feature. TODO: consider more elegant solution.
+  // States need direct access to driver's private data, so they are
+  // declared as friends here. TODO: consider a more elegant solution.
   friend class c_state_init;
   friend class c_state_card_in;
   friend class c_state_pin_ok;

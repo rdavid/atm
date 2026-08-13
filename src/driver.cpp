@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020-2025 David Rabkin
+// SPDX-FileCopyrightText: 2020-2026 David Rabkin
 // SPDX-License-Identifier: 0BSD
 #include <driver.hpp>
 
@@ -12,40 +12,41 @@ namespace atm
 // See https://bugs.llvm.org/show_bug.cgi?id=23728
 // clang-format off
 
-// Constructor: show initial prompt asking user to insert a card.
+// Shows the initial prompt asking the user to insert a card.
 driver::driver() {
   m_interface.display_enter_card();
 }
 
-// Handle card insertion: set the active account and dispatch the insert event
-// to the state machine.
+// Handles card insertion by setting the active account and dispatching the
+// insert event to the state machine.
 void driver::card_inserted(const std::string& account) {
   m_account = account;
   m_machine.handle(c_event_insert(), *this);
 }
 
-// Handle PIN digit entry: append digit to the working PIN buffer and
-// notify the state machine so it can decide next actions.
+// Handles PIN digit entry by appending the digit to the working PIN buffer
+// and notifying the state machine so it can decide the next action.
 void driver::digit_pressed(char digit) {
   m_pass << digit;
   m_machine.handle(c_event_digit(), *this);
 }
 
-// Request to display balance: forward the balance event to the state
-// machine which will query the bank and render the result when available.
+// Requests balance display by forwarding the balance event to the state
+// machine, which queries the bank and renders the result when available.
 void driver::balance_pressed() {
   m_machine.handle(c_event_balance(), *this);
 }
 
-// Request to withdraw a fixed amount: set amount and signal the state
-// machine. The state machine performs the withdrawal and UI issuance.
+// Requests withdrawal of a fixed amount by setting the amount and signaling
+// the state machine, which performs the withdrawal and UI issuance.
 void driver::withdraw_pressed(unsigned amount) {
   m_amount = amount;
   m_machine.handle(c_event_withdraw(), *this);
 }
 
-// Cancel the current operation: display cancellation, eject card, reset
-// internal state (amount, PIN buffer, account) and reset the state machine.
+// Cancels the current operation by displaying the cancellation message,
+// ejecting the card, resetting internal state (amount, PIN buffer, account),
+// and resetting the state machine.
 void driver::cancel_pressed() {
   auto m1 = m_interface.display_cancelled();
   m1.wait();

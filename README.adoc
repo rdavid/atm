@@ -30,9 +30,10 @@ The system should include 3 components:
 
 == Description
 
-For maximizing responsiveness communication between these components should be
-non-blocking, so, for example the `atm_handler` can't call a function of
-`user_interface` directly because it would block it from handling other events.
+For maximum responsiveness, communication between these components should be
+non-blocking. For example, the `atm_handler` can't call a function of
+`user_interface` directly, because doing so would block it from handling
+other events.
 
 At start, the system should wait for a card to be inserted. Once the card is
 inserted, it then waits for the user to enter their PIN, one digit at a time.
@@ -46,11 +47,11 @@ If they select to withdraw, you wait for confirmation from the bank before
 issuing the cash and returning the card or displaying an “insufficient funds”
 message and returning their card.
 Every user operation other than the above should be ignored.
-Assume a legal PIN is of 4 digit length.
+Assume a legal PIN is 4 digits long.
 Your code should interact with the user and bank using the interfaces in
 link:include/interface.hpp[`interface.hpp`] and
 link:include/bank.hpp[`bank.hpp`].
-link:src/main.hpp[`main.cpp`] will be used to drive the application.
+link:src/main.cpp[`main.cpp`] will be used to drive the application.
 
 == Example
 
@@ -93,7 +94,7 @@ q
 * You should implement the functions in link:src/driver.cpp[`driver.cpp`]
 * You are provided with CMake build scripts but allowed to use any build
 system you wish
-* Free free to add member variables and functions to the above classes as you
+* Feel free to add member variables and functions to the above classes as you
 see fit as well as defining additional types
 * Your solution should compile and run without errors
 * For bonus points, add unit tests to check your implementation
