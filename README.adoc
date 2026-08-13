@@ -109,7 +109,7 @@ The balance of your account is 50
 q
 ----
 
-== Implementation details
+== Notes
 
 * You should implement the functions in
 link:{url-src}/src/driver.cpp[`driver.cpp`]
