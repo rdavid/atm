@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
+---
+name: clang-tidy
+'on':
+  pull_request:
+    paths: &paths
+      - .clang-tidy
+      - CMakeLists.txt
+      - cmake/**
+      - include/**
+      - src/**
+  push:
+    branches: [master]
+    paths: *paths
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  clang-tidy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends --yes clang-tidy
+      - run: cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      - run: |
+          clang-tidy -p build --extra-arg=-Wno-unknown-warning-option \
+            src/*.cpp

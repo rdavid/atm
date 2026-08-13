@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2020-2026 David Rabkin
 // SPDX-License-Identifier: 0BSD
 #include <driver.hpp>
+#include <string>
 
 // driver.cpp - driver implementation for the ATM. Coordinates input events
 // from the test harness with the ATM state machine and the bank/interface
@@ -13,7 +14,7 @@ namespace atm
 // clang-format off
 
 // Shows the initial prompt asking the user to insert a card.
-driver::driver() {
+driver::driver() : m_interface() {
   m_interface.display_enter_card();
 }
 

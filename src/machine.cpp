@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020-2025 David Rabkin
+// SPDX-FileCopyrightText: 2020-2026 David Rabkin
 // SPDX-License-Identifier: 0BSD
 // machine.cpp - state machine implementation for the ATM driver.
 //
@@ -9,8 +9,10 @@
 
 #include "machine.hpp"
 #include "driver.hpp"
+#include <iostream>
 #include <map>
 #include <string>
+#include <utility>
 
 namespace atm {
 
@@ -23,33 +25,34 @@ namespace atm {
 
 class c_state {
  public:
+  c_state(const c_state&) = delete;
+  c_state& operator=(const c_state&) = delete;
+  c_state(c_state&&) = delete;
+  c_state& operator=(c_state&&) = delete;
+  virtual ~c_state() = default;
   virtual std::string get_id() const = 0;
   virtual const c_state* handle(const c_event&, driver&) const = 0;
   static const c_state* get_state(const std::string& id) {
-    std::map<std::string, const c_state*>::const_iterator it =
-      s_db.find(id);
-    return it != s_db.end() ? it->second : NULL;
+    const auto it = s_db.find(id);
+    return it != s_db.end() ? it->second : nullptr;
   }
  protected:
-  c_state() {}
-  virtual ~c_state() {}
+  c_state() = default;
   void add(const std::string& id) {
     s_db.insert(std::make_pair(id, this));
   }
  private:
-  c_state(const c_state&);
-  c_state& operator=(const c_state&);
   static std::map<std::string, const c_state*> s_db;
 };
 
 // Static. Private.
 std::map<std::string, const c_state*> c_state::s_db;
 
-class c_state_init : public c_state {
+class c_state_init final : public c_state {
  public:
-  c_state_init() { add(get_id()); }
-  virtual std::string get_id() const { return "init"; }
-  virtual const c_state* handle(const c_event& e, driver& d) const {
+  c_state_init() noexcept { add(get_id()); }
+  std::string get_id() const override { return "init"; }
+  const c_state* handle(const c_event& e, driver& d) const override {
     if (e.get_id() != "insert") {
       d.m_interface.display_enter_card();
       return this;
@@ -64,11 +67,11 @@ class c_state_init : public c_state {
 // Static. Private.
 c_state_init c_state_init::s_inst;
 
-class c_state_card_in : public c_state {
+class c_state_card_in final : public c_state {
  public:
-  c_state_card_in() { add(get_id()); }
-  virtual std::string get_id() const { return "card_in"; }
-  virtual const c_state* handle(const c_event& e, driver& d) const {
+  c_state_card_in() noexcept { add(get_id()); }
+  std::string get_id() const override { return "card_in"; }
+  const c_state* handle(const c_event& e, driver& d) const override {
     if (e.get_id() != "digit" || d.m_pass.str().length() > 4) {
       auto m1 = d.m_interface.eject_card();
       d.m_pass.str("");
@@ -102,11 +105,11 @@ class c_state_card_in : public c_state {
 // Static. Private.
 c_state_card_in c_state_card_in::s_inst;
 
-class c_state_pin_ok : public c_state {
+class c_state_pin_ok final : public c_state {
  public:
-  c_state_pin_ok() { add(get_id()); }
-  virtual std::string get_id() const { return "pin_ok"; }
-  virtual const c_state* handle(const c_event& e, driver& d) const {
+  c_state_pin_ok() noexcept { add(get_id()); }
+  std::string get_id() const override { return "pin_ok"; }
+  const c_state* handle(const c_event& e, driver& d) const override {
     if (e.get_id() == "withdraw") {
       // There is no need to wait.
       d.m_bank.withdraw(d.m_account, d.m_amount);
@@ -119,7 +122,7 @@ class c_state_pin_ok : public c_state {
       d.m_interface.display_balance(b.get());
       return this;
     }
-    std::cerr << "Event " << e.get_id() << " is not handled." << std::endl;
+    std::cerr << "Event " << e.get_id() << " is not handled.\n";
     return this;
   }
  private:

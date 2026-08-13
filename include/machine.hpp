@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020-2025 David Rabkin
+// SPDX-FileCopyrightText: 2020-2026 David Rabkin
 // SPDX-License-Identifier: 0BSD
 #pragma once
 #include <string>
@@ -10,24 +10,29 @@ class c_state;
 
 // c_events definitions.
 struct c_event {
-  virtual ~c_event() {};
+  c_event() = default;
+  c_event(const c_event&) = delete;
+  c_event& operator=(const c_event&) = delete;
+  c_event(c_event&&) = delete;
+  c_event& operator=(c_event&&) = delete;
+  virtual ~c_event() = default;
   virtual std::string get_id() const = 0;
 };
 
 struct c_event_insert : c_event {
-  virtual std::string get_id() const { return "insert"; }
+  std::string get_id() const override { return "insert"; }
 };
 
 struct c_event_digit : c_event {
-  virtual std::string get_id() const { return "digit"; }
+  std::string get_id() const override { return "digit"; }
 };
 
 struct c_event_balance : c_event {
-  virtual std::string get_id() const { return "balance"; }
+  std::string get_id() const override { return "balance"; }
 };
 
 struct c_event_withdraw : c_event {
-  virtual std::string get_id() const { return "withdraw"; }
+  std::string get_id() const override { return "withdraw"; }
 };
 
 // State machine.

@@ -31,7 +31,7 @@ class driver {
   bank_handler m_bank;
 //  atm_handler m_atm;
   c_machine m_machine;
-  unsigned m_amount;
+  unsigned m_amount = 0;
   std::string m_account;
   std::stringstream m_pass;
 };

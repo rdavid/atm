@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
+#
+# PIN and amount values are domain literals, not magic numbers. Short
+# names like `d`, `e`, and `c` name state-machine parameters throughout
+# machine.cpp. Trailing return types and [[nodiscard]] are not used
+# anywhere in this codebase, so enforcing them would just be churn.
+# interface.hpp and bank.hpp are the given stubs for a real bank
+# connection and a real I/O device, so their methods look stateless
+# today but are not meant to be static.
+---
+Checks: >
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -modernize-use-nodiscard,
+  -modernize-use-trailing-return-type,
+  -readability-convert-member-functions-to-static
+WarningsAsErrors: '*'
+HeaderFilterRegex: '.*'

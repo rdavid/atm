@@ -15,7 +15,6 @@
 
 #include <cstdio>
 #include <driver.hpp>
-#include <iostream>
 #include <string>
 
 int main()
@@ -50,6 +49,8 @@ int main()
       break;
     case 'i':
       driver.card_inserted("test_account");
+      break;
+    default:
       break;
     }
   }
