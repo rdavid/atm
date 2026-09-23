@@ -41,8 +41,8 @@ endif::[]
 
 == About
 
-Implement a simple ATM (Automated Teller Machine) system.
-The system should include 3 components:
+Implement a simple ATM (Automated Teller Machine) system with three
+components:
 
 * link:{url-src}/include/interface_handler.hpp[User interface]
 * link:{url-src}/include/atm_handler.hpp[ATM logic]
@@ -51,12 +51,12 @@ The system should include 3 components:
 == Description
 
 For maximum responsiveness, communication between these components should be
-non-blocking. For example, the `atm_handler` can't call a function of
+non-blocking. For example, `atm_handler` can't call a function on
 `user_interface` directly, because doing so would block it from handling
 other events.
 
-At start, the system should wait for a card to be inserted. Once the card is
-inserted, it then waits for the user to enter their PIN, one digit at a time.
+At the start, the system waits for a card to be inserted. Once the card is
+inserted, it waits for the user to enter their PIN, one digit at a time.
 Once enough digits have been entered, the PIN is verified.
 If the PIN is not OK, you’re finished, so you return the card to the customer
 and resume waiting for someone to enter their card.
