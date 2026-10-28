@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2020-2026 David Rabkin
 // SPDX-License-Identifier: 0BSD
+//
 // main.cpp - interactive CLI test harness for the ATM driver.
 //
 // Key bindings:

@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2020-2026 David Rabkin
 // SPDX-License-Identifier: 0BSD
+//
 // machine.cpp - state machine implementation for the ATM driver.
 //
 // Implements the ATM state machine as a set of singleton state objects.
