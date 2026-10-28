@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: 0BSD
 #
 # Scans for committed secrets. The pull-requests:write permission below is
-# scoped to the gitleaks job alone (not the workflow default) so that
-# gitleaks-action can comment findings on the triggering pull request.
+# scoped to the gitleaks job alone, not the workflow default. It lets
+# gitleaks-action comment findings on the triggering pull request.
 ---
 name: gitleaks
 'on':

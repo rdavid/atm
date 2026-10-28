@@ -41,8 +41,7 @@ endif::[]
 
 == About
 
-Implement a simple ATM (Automated Teller Machine) system with three
-components:
+A simple ATM (Automated Teller Machine) system with three components:
 
 * link:{url-src}/include/interface_handler.hpp[User interface]
 * link:{url-src}/include/atm_handler.hpp[ATM logic]
@@ -50,28 +49,29 @@ components:
 
 == Description
 
-For maximum responsiveness, communication between these components should be
-non-blocking. For example, `atm_handler` can't call a function on
-`user_interface` directly, because doing so would block it from handling
-other events.
+For maximum responsiveness, communication between these components is
+non-blocking.
+For example, `atm_handler` can't call a function on `user_interface`
+directly, because doing so would block it from handling other events.
 
-At the start, the system waits for a card to be inserted. Once the card is
-inserted, it waits for the user to enter their PIN, one digit at a time.
+At the start, the system waits for a card to be inserted.
+Once the card is inserted, it waits for the user to enter a PIN, one digit at
+a time.
 Once enough digits have been entered, the PIN is verified.
-If the PIN is not OK, you’re finished, so you return the card to the customer
-and resume waiting for someone to enter their card.
-If the PIN is OK, you wait for them to either cancel the transaction, display
-their balance or withdraw 50.
-If they cancel, you’re finished, and you return their card.
-If they select to withdraw, you wait for confirmation from the bank before
-issuing the cash and returning the card or displaying an “insufficient funds”
-message and returning their card.
-Every user operation other than the above should be ignored.
-Assume a legal PIN is 4 digits long.
-Your code should interact with the user and bank using the interfaces in
+If the PIN is incorrect, the system returns the card and resumes waiting for
+a card.
+If the PIN is correct, the system waits for the user to cancel the
+transaction, display the balance, or withdraw 50.
+If the user cancels, the system returns the card.
+If the user withdraws, the system waits for confirmation from the bank.
+It then issues the cash, or displays an “insufficient funds” message, and
+returns the card.
+The system ignores every other user operation.
+A legal PIN is 4 digits long.
+The code interacts with the user and the bank through the interfaces in
 link:{url-src}/include/interface.hpp[`interface.hpp`] and
 link:{url-src}/include/bank.hpp[`bank.hpp`].
-link:{url-src}/src/main.cpp[`main.cpp`] will be used to drive the application.
+link:{url-src}/src/main.cpp[`main.cpp`] drives the application.
 
 == Example
 
@@ -111,14 +111,13 @@ q
 
 == Notes
 
-* You should implement the functions in
-link:{url-src}/src/driver.cpp[`driver.cpp`]
-* You are provided with CMake build scripts but allowed to use any build
-system you wish
-* Feel free to add member variables and functions to the above classes as you
-see fit as well as defining additional types
-* Your solution should compile and run without errors
-* For bonus points, add unit tests to check your implementation
+* The functions are implemented in
+link:{url-src}/src/driver.cpp[`driver.cpp`].
+* CMake build scripts are provided, but any build system works.
+* Member variables, member functions, and additional types may be added to
+the classes above as needed.
+* The solution compiles and runs without errors.
+* Optionally, add unit tests to check the implementation.
 
 == License
 
