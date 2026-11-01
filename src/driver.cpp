@@ -4,9 +4,9 @@
 #include <string>
 
 // driver.cpp - driver implementation for the ATM. Coordinates input events
-// from the test harness with the ATM state machine and the bank/interface
-// backends. Methods intentionally perform small synchronous waits where
-// necessary to ensure proper UI sequencing.
+// from the test harness with the ATM state machine and the bank and interface
+// backends. Methods perform small synchronous waits where needed to keep the
+// UI in the right sequence.
 
 namespace atm
 {
@@ -45,9 +45,9 @@ void driver::withdraw_pressed(unsigned amount) {
   m_machine.handle(c_event_withdraw(), *this);
 }
 
-// Cancels the current operation by displaying the cancellation message,
-// ejecting the card, resetting internal state (amount, PIN buffer, account),
-// and resetting the state machine.
+// Cancels the current operation. Displays the cancellation message, ejects the
+// card, clears the internal state (amount, PIN buffer, account), and resets
+// the state machine.
 void driver::cancel_pressed() {
   auto m1 = m_interface.display_cancelled();
   m1.wait();

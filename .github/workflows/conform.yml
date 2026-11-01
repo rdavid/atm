@@ -3,13 +3,13 @@
 #
 # Enforces the Conventional Commits format. On a pull request, every commit
 # ahead of the base branch is checked. The --base-branch flag of conform needs
-# the base ref locally, which fetch-depth 0 guarantees. The checkout ref is
-# pinned to the PR head SHA, so HEAD is the real last commit rather than the
-# synthetic merge commit of GitHub. The auto-generated message of that merge
-# commit fails Conventional Commits. On a direct push to master, only the
-# landed commit is checked. GITHUB_EVENT_NAME and GITHUB_BASE_REF are plain
-# runner environment variables here, not template-expanded strings, so the
-# branching stays free of template injection. Conform has no stable release
+# the base ref locally, which fetch-depth 0 provides. The checkout ref is
+# pinned to the PR head SHA, so HEAD is the real last commit and not the
+# synthetic merge commit that GitHub creates. The auto-generated message of
+# that merge commit fails Conventional Commits. On a direct push to master,
+# only the pushed commit is checked. GITHUB_EVENT_NAME and GITHUB_BASE_REF are
+# plain runner environment variables, not template-expanded strings, so the
+# branching is safe from template injection. Conform has no stable release
 # yet, so the pin below tracks the latest alpha.
 ---
 name: conform

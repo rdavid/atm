@@ -21,8 +21,8 @@ namespace atm {
 //
 // Each concrete c_state subclass represents a node in the state machine.
 // The handle() method receives an event and the driver context and returns
-// the next state (which may be the same instance). States register via
-// add() into the static registry so they can be looked up by id.
+// the next state (which may be the same instance). Each state registers
+// itself in the static registry through add() so it can be found by id.
 
 class c_state {
  public:

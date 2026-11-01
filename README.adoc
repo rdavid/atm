@@ -49,26 +49,25 @@ A simple ATM (Automated Teller Machine) system with three components:
 
 == Description
 
-For maximum responsiveness, communication between these components is
-non-blocking.
+For maximum responsiveness, the components communicate without blocking.
 For example, `atm_handler` can't call a function on `user_interface`
-directly, because doing so would block it from handling other events.
+directly, because doing so would stop it from handling other events.
 
-At the start, the system waits for a card to be inserted.
-Once the card is inserted, it waits for the user to enter a PIN, one digit at
-a time.
-Once enough digits have been entered, the PIN is verified.
-If the PIN is incorrect, the system returns the card and resumes waiting for
-a card.
-If the PIN is correct, the system waits for the user to cancel the
-transaction, display the balance, or withdraw 50.
-If the user cancels, the system returns the card.
-If the user withdraws, the system waits for confirmation from the bank.
-It then issues the cash, or displays an “insufficient funds” message, and
-returns the card.
+At the start, the system waits for a card.
+Once a card is inserted, it waits for the user to enter a PIN one digit at a
+time.
+A valid PIN is 4 digits long.
+After the last digit, the system verifies the PIN.
+If the PIN is incorrect, the system ejects the card and waits for a new one.
+If the PIN is correct, the system waits for the user to cancel, display the
+balance, or withdraw 50.
+If the user cancels, the system ejects the card.
+If the user withdraws, the system waits for the bank to confirm.
+It then issues the cash or displays an “insufficient funds” message, and
+ejects the card.
 The system ignores every other user operation.
-A legal PIN is 4 digits long.
-The code interacts with the user and the bank through the interfaces in
+
+The code talks to the user and the bank through the interfaces in
 link:{url-src}/include/interface.hpp[`interface.hpp`] and
 link:{url-src}/include/bank.hpp[`bank.hpp`].
 link:{url-src}/src/main.cpp[`main.cpp`] drives the application.
@@ -113,11 +112,11 @@ q
 
 * The functions are implemented in
 link:{url-src}/src/driver.cpp[`driver.cpp`].
-* CMake build scripts are provided, but any build system works.
-* Member variables, member functions, and additional types may be added to
-the classes above as needed.
+* CMake build scripts are included, but any build system works.
+* You may add member variables, member functions, and types to the classes
+above as needed.
 * The solution compiles and runs without errors.
-* Optionally, add unit tests to check the implementation.
+* Unit tests are optional.
 
 == License
 

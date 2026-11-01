@@ -21,8 +21,8 @@ class driver {
   void card_inserted(const std::string& account);
   void cancel_pressed();
  private:
-  // States need direct access to driver's private data, so they are
-  // declared as friends here. TODO: consider a more elegant solution.
+  // States need direct access to the private data of the driver, so they are
+  // declared as friends here. TODO: Find a more elegant solution.
   friend class c_state_init;
   friend class c_state_card_in;
   friend class c_state_pin_ok;
