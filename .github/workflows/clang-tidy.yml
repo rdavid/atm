@@ -6,6 +6,7 @@ name: clang-tidy
   pull_request:
     paths: &paths
       - .clang-tidy
+      - .github/workflows/clang-tidy.yml
       - CMakeLists.txt
       - cmake/**
       - include/**

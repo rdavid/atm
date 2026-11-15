@@ -5,6 +5,7 @@ name: build
 'on':
   pull_request:
     paths: &paths
+      - .github/workflows/build.yml
       - CMakeLists.txt
       - cmake/**
       - include/**
@@ -40,4 +41,10 @@ jobs:
         with:
           persist-credentials: false
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-      - run: cmake --build build
+      - run: cmake --build build --parallel
+      - run: |
+          out=$(printf 'i3412i1234wbcq' | ./build/src/atm)
+          printf '%s\n' "$out"
+          for msg in 'PIN incorrect' 'Issuing 50' 'Cancelled'; do
+            printf '%s\n' "$out" | grep --fixed-strings --quiet "$msg"
+          done
