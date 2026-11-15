@@ -41,40 +41,63 @@ endif::[]
 
 == About
 
-A simple ATM (Automated Teller Machine) system with three components:
+An event-driven ATM (Automated Teller Machine) simulator in C++.
+It consists of three components that never block each other:
 
-* link:{url-src}/include/interface_handler.hpp[User interface]
-* link:{url-src}/include/atm_handler.hpp[ATM logic]
-* link:{url-src}/include/bank_handler.hpp[Bank communication]
+* link:{url-src}/include/interface_handler.hpp[`interface_handler`] talks
+to the user.
+* link:{url-src}/include/machine.hpp[`c_machine`] holds the ATM logic.
+* link:{url-src}/include/bank_handler.hpp[`bank_handler`] talks to the bank.
 
-== Description
+The handlers run each call through `std::async` and return a `std::future`.
+The ATM logic keeps handling events instead of waiting for a reply.
 
-For maximum responsiveness, the components communicate without blocking.
-For example, `atm_handler` can't call a function on `user_interface`
-directly, because doing so would stop it from handling other events.
+The state machine moves through these steps:
 
-At the start, the system waits for a card.
-Once a card is inserted, it waits for the user to enter a PIN one digit at a
-time.
-A valid PIN is 4 digits long.
-After the last digit, the system verifies the PIN.
-If the PIN is incorrect, the system ejects the card and waits for a new one.
-If the PIN is correct, the system waits for the user to cancel, display the
-balance, or withdraw 50.
-If the user cancels, the system ejects the card.
-If the user withdraws, the system waits for the bank to confirm.
-It then issues the cash or displays an “insufficient funds” message, and
-ejects the card.
-The system ignores every other user operation.
+. It waits for a card.
+. It reads a 4-digit PIN one digit at a time.
+. It asks the bank to verify the PIN.
+An incorrect PIN ejects the card and returns to the first step.
+. It waits for the user to withdraw 50, display the balance, or cancel.
+A withdrawal waits for the bank, then issues the cash or reports
+insufficient funds.
+Cancel ejects the card.
 
-The code talks to the user and the bank through the interfaces in
+The machine ignores every other input.
+
+The components reach the user and the bank through
 link:{url-src}/include/interface.hpp[`interface.hpp`] and
 link:{url-src}/include/bank.hpp[`bank.hpp`].
-link:{url-src}/src/main.cpp[`main.cpp`] drives the application.
+link:{url-src}/src/main.cpp[`main.cpp`] reads the keyboard, and
+link:{url-src}/src/driver.cpp[`driver.cpp`] turns each key into an event.
 
-== Example
+== Build
 
 [,sh]
+----
+cmake -S . -B build
+cmake --build build
+./build/src/atm
+----
+
+== Usage
+
+[cols="1,3"]
+|===
+|Key |Action
+
+|`i` |Insert a card
+|`0`-`9` |Enter a PIN digit
+|`w` |Withdraw 50
+|`b` |Display the balance
+|`c` |Cancel and eject the card
+|`q` |Quit
+|===
+
+The test account accepts PIN `1234`.
+A sample session looks like this:
+
+[,text]
 ----
 Please enter your card (i)
 i
@@ -97,26 +120,8 @@ c
 Cancelled
 Ejecting card
 Please enter your card (i)
-i
-Please enter your PIN (0-9)
-1234
-Withdraw 50? (w)
-Display Balance? (b)
-Cancel? (c)
-b
-The balance of your account is 50
 q
 ----
-
-== Notes
-
-* The functions are implemented in
-link:{url-src}/src/driver.cpp[`driver.cpp`].
-* CMake build scripts are included, but any build system works.
-* You may add member variables, member functions, and types to the classes
-above as needed.
-* The solution compiles and runs without errors.
-* Unit tests are optional.
 
 == License
 

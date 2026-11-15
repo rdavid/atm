@@ -72,6 +72,27 @@ code {
   color: var(--accent-cyan) !important;
   border: 1px solid var(--border);
 }
+table.tableblock {
+  background: var(--bg-panel) !important;
+  border-color: var(--border) !important;
+}
+table.tableblock thead tr,
+table.tableblock tbody tr,
+table.tableblock tbody tr:nth-of-type(even) {
+  background: transparent !important;
+}
+table.tableblock thead tr { background: var(--bg) !important; }
+th.tableblock, td.tableblock {
+  border-color: var(--border) !important;
+}
+th.tableblock, td.tableblock, td.tableblock > .content > p,
+p.tableblock {
+  color: var(--fg) !important;
+}
+table.tableblock thead th {
+  font-family: var(--mono);
+  color: var(--accent-yellow) !important;
+}
 #content #toc {
   display: flex;
   align-items: center;
